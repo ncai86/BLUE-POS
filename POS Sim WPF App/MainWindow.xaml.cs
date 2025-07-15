@@ -133,5 +133,11 @@ namespace POS_Sim_WPF_App
             webviewContainer.NavigateToString(html);
             //webviewContainer.Source = new Uri(html);
         }
+
+        private void SettingsClear_Click(object sender, RoutedEventArgs e)
+        {
+            usernameTextbox.Clear();
+            passwordTextbox.Clear();   
+        }
     }
 }
