@@ -1,5 +1,10 @@
-﻿using System.Text;
+﻿using Microsoft.Web.WebView2.Core;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,9 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Net.Http;
-using Microsoft.Web.WebView2.Core;
-using System.Text.RegularExpressions;
 
 
 namespace POS_Sim_WPF_App
@@ -26,11 +28,23 @@ namespace POS_Sim_WPF_App
         public static string SessionToken { get; set; }
     }
 
+    public class SaleItem
+    {
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
+    }
+
+    
     public partial class MainWindow : Window
     {
+        public ObservableCollection<SaleItem> SaleItems { get; set; } = new ObservableCollection<SaleItem>();
+
         public MainWindow()
         {
             InitializeComponent();
+            POSDisplayListBox.ItemsSource = SaleItems;
+            DataContext = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -137,7 +151,70 @@ namespace POS_Sim_WPF_App
         private void SettingsClear_Click(object sender, RoutedEventArgs e)
         {
             usernameTextbox.Clear();
-            passwordTextbox.Clear();   
+            passwordTextbox.Clear();
+            //webviewContainer.Visibility = Visibility.Collapsed;
+        }
+
+        private void Product_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                string itemName = button.Content.ToString();
+                decimal itemPrice = Convert.ToInt16(button.Tag);
+
+                var existingItem = SaleItems.FirstOrDefault(i => i.Name == itemName);
+                if (existingItem != null)
+                {
+                    existingItem.Quantity++;
+                    existingItem.TotalPrice += itemPrice;
+                }
+                else
+                {
+                    SaleItems.Add(new SaleItem
+                    {
+                        Name = itemName,
+                        Quantity = 1,
+                        TotalPrice = itemPrice
+                    });
+                }
+
+                POSDisplayListBox.Items.Refresh();
+
+                //Update Total
+                decimal total = SaleItems.Sum(i => i.TotalPrice);
+                TotalAmountValue.Content = $"¥{total:0}";
+
+                decimal vat = (total / 110) * 10;
+                TotalVatValue.Content = $"¥{vat:0}";   
+
+            }
+        }
+
+        private void ClearAllListedBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                //POSDisplayListBox.Items.Clear();
+                SaleItems.Clear();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error clearing items: {ex.Message}");
+            }
+
+            //SaleItems.Clear();
+            //POSDisplayListBox.Items.Refresh();
+        }
+
+
+        private void RemoveSelectedItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is SaleItem item)
+            {
+                SaleItems.Remove(item);
+            }
         }
     }
 }
