@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -214,7 +215,67 @@ namespace POS_Sim_WPF_App
             if (sender is Button button && button.DataContext is SaleItem item)
             {
                 SaleItems.Remove(item);
+
+                //Update Total
+                decimal total = SaleItems.Sum(i => i.TotalPrice);
+                TotalAmountValue.Content = $"¥{total:0}";
+
+                decimal vat = (total / 110) * 10;
+                TotalVatValue.Content = $"¥{vat:0}";
             }
         }
+
+
+        private void ToggleTaxFreeEnableButton_Checked(object sender, RoutedEventArgs e)
+        {
+            //ToggleEnableButton.Content = "Disable";
+            // Add logic to enable something
+            //TaxFreeToggle.FontWeight = FontWeights.Bold;
+            //TaxFreeToggle.Background = (Brush)new BrushConverter().ConvertFromString("#FF0014A0");
+           // TaxFreeToggle.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FFFFFFFF");
+           // TaxFreeToggle.Padding = new Thickness(6, 6, 4, 4);
+            if (TaxFreeToggle.IsChecked == true)
+            {
+                // The toggle is ON (enabled)
+                MessageBox.Show("button enabled.");
+            }
+            else
+            {
+                // The toggle is OFF (disabled)
+                MessageBox.Show("button disabled.");
+            }
+        }
+
+        private void ToggleTaxFreeEnableButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //ToggleEnableButton.Content = "Enable";
+            // Add logic to disable something
+
+            if (TaxFreeToggle.IsChecked == true)
+            {
+                // The toggle is ON (enabled)
+                MessageBox.Show("button enabled.");
+            }
+            else
+            {
+                // The toggle is OFF (disabled)
+                MessageBox.Show("button disabled.");
+            }
+
+            TaxFreeToggle.Background = (Brush)new BrushConverter().ConvertFromString("#FF001EC8");
+            
+
+        }
+
+        private void WSTest_Click(object sender, RoutedEventArgs e)
+        {
+            Guid newGuid = Guid.NewGuid();
+
+            string timestamp = DateTime.Now.ToString("yyMMdd_HHmmsszzz").Replace(":", "");
+            string groupID = $"{newGuid}{timestamp}".Replace("-","");
+
+            Debug.WriteLine("Generated GUID: " + groupID);
+        }
+
     }
 }
