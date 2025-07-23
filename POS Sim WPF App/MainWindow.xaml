@@ -189,27 +189,132 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="Product1" Content="お土産A" Tag="1100" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product2" Content="お土産B" Tag="2100" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product3" Content="お土産C" Tag="800" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product4" Content="お土産D" Tag="5100" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product5" Content="お土産E" Tag="8100" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product6" Content="お土産F" Tag="2000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product7" Content="お土産G" Tag="500" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click"/>
-                                    <Button x:Name="Product8" Content="文房具A" Tag="5000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product9" Content="文房具B" Tag="1000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product10" Content="文房具C" Tag="8000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product11" Content="雑貨A" Tag="9000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product12" Content="雑貨B" Tag="3200" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product13" Content="雑貨C" Tag="15000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product14" Content="雑貨D" Tag="600" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product15" Content="文房具D" Tag="1400" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product16" Content="文房具E" Tag="650" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product17" Content="文房具F" Tag="10000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click"/>
-                                    <Button x:Name="Product18" Content="雑貨E" Tag="5000" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product19" Content="雑貨F" Tag="1170" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product20" Content="雑貨G" Tag="500" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click"/>
-                                    <Button x:Name="Product21" Content="お酒A" Tag="1600" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFD4C3C3" Click="Product_Click"/>
+                                    <Button x:Name="Product1" Tag="お土産A|1100|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産A" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥1100" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product2" Tag="お土産B|2100|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産B" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥2100" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product3" Tag="お土産C|800|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産C" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥800" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product4" Tag="お土産D|5100|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産D" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥5100" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product5" Tag="お土産E|8100|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産E" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥8100" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product6" Tag="お土産F|2000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産F" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥2000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product7" Tag="お土産G|500|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,10,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF22BDE6" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お土産G" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥500" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product8" Tag="文房具A|5000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具A" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥5000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product9" Tag="文房具B|1000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具B" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥1000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product10" Tag="文房具C|8000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具C" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥8000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product11" Tag="雑貨A|9000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨A" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥9000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product12" Tag="雑貨B|3200|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨B" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥3200" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product13" Tag="雑貨C|15000|8" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨C" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥15000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product14" Tag="雑貨D|600|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨D" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥600" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product15" Tag="文房具D|1400|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具D" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥1400" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product16" Tag="文房具E|650|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="76,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具E" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥650" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product17" Tag="文房具F|10000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="142,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FF43F1BD" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="文房具F" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥10,000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product18" Tag="雑貨E|5000|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="208,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨E" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥5,000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product19" Tag="雑貨F|1170|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="274,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨F" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥1,170" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product20" Tag="雑貨G|500|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="雑貨G" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥500" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Product21" Tag="お酒A|1600|10|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="406,210,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFD4C3C3" Click="Product_Click">
+                                        <StackPanel>
+                                            <TextBlock Text="お酒A" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="¥1,600" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
                                 </Grid>
                             </Border>
                         </Grid>

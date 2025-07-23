@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,55 +30,61 @@ namespace POS_Sim_WPF_App
         public string Name { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public int VatRate { get; set; }
+        public Boolean TaxFreeItem { get; set; }
     }
 
-
-    //public class IssueModel
+    //public class ProductInfo
     //{
-    //    public PurchaseModel issue{ get; set; }
+    //    public decimal Price { get; set; }
+    //    public int VatRate { get; set; }
+    //    public Boolean TaxFreeItem { get; set; }
     //}
 
     public class IssueModel
     {
-        public Purchase Purchase { get; set; }
+        public Purchase purchase { get; set; }
     }
 
     public class Purchase
     {
-        public List<Receipt> Receipts { get; set; }
+        public List<Receipt> receipts { get; set; }
     }
 
     public class Receipt
     {
-        public string ReceiptNumber { get; set; }
-        public string ReceiptDate { get; set; }
-        public object TotalAmount { get; set; } // You can replace 'object' with a specific class if needed
-        public List<object> TotalsPerVat { get; set; } // Define a class if structure is known
-        public List<PurchaseItem> PurchaseItems { get; set; }
+        public string receiptNumber { get; set; }
+        public string receiptDate { get; set; }
+        public object totalAmount { get; set; } // You can replace 'object' with a specific class if needed
+        public List<object> totalsPerVat { get; set; } // Define a class if structure is known
+        public List<PurchaseItem> purchaseItems { get; set; }
     }
 
     public class PurchaseItem
     {
-        public int VatRate { get; set; }
-        public int Quantity { get; set; }
-        public int UnitQuantity { get; set; }
-        public string GoodId { get; set; }
-        public string GoodDescription { get; set; }
-        public string GoodDetailDescription { get; set; }
-        public string GoodCategory { get; set; }
-        public string MeasurementUnit { get; set; }
-        public string SerialNumber { get; set; }
-        public string ProductCode { get; set; }
-        public Amount Amount { get; set; }
-        public Amount UnitAmount { get; set; }
-        public string GoodCustomsClassification { get; set; }
-        public string MasterAmount { get; set; }
-        public List<object> CustomParameters { get; set; } // Define class if needed
+        public int vatRate { get; set; }
+        public int quantity { get; set; }
+        public int unitQuantity { get; set; }
+        public string goodId { get; set; }
+        public string goodDescription { get; set; }
+        public string goodDetailDescription { get; set; }
+        public string goodCategory { get; set; }
+        public string measurementUnit { get; set; }
+        public string serialNumber { get; set; }
+        public string productCode { get; set; }
+        public Amount amount { get; set; }
+        public Amount unitAmount { get; set; }
+        public string goodCustomsClassification { get; set; }
+        public string masterAmount { get; set; }
+        public List<object> customParameters { get; set; } // Define class if needed
     }
 
     public class Amount
     {
-        public decimal GrossAmount { get; set; } = 0m;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public decimal grossAmount { get; set; }
+        public decimal netAmount { get; set; } = 0m;
     }
 
 
@@ -198,26 +205,26 @@ namespace POS_Sim_WPF_App
 
             var issueModel = new IssueModel
             {
-                Purchase = new Purchase
+                purchase = new Purchase
                 {
-                    Receipts =
+                    receipts =
                     [
                         new Receipt
                         {
-                            ReceiptNumber = ReceiptNumVal.Content.ToString(),
-                            ReceiptDate = "2025-07-18",
-                            PurchaseItems =
+                            receiptNumber = ReceiptNumVal.Content.ToString(),
+                            receiptDate = "2025-07-18",
+                            purchaseItems =
                             [
                                 new PurchaseItem
                                 {
-                                    VatRate = 10,
-                                    Quantity = 1,
-                                    GoodId = "123",
-                                    GoodDescription = "good",
-                                    GoodDetailDescription = "detaildescrip",
-                                    SerialNumber = "3434",
-                                    Amount = new Amount { GrossAmount = 1000 },
-                                    UnitAmount = new Amount { GrossAmount = 1000 }
+                                    vatRate = 10,
+                                    quantity = 1,
+                                    goodId = "123",
+                                    goodDescription = "good",
+                                    goodDetailDescription = "detaildescrip",
+                                    serialNumber = "3434",
+                                    amount = new Amount { netAmount = 1000 },
+                                    //UnitAmount = new Amount { GrossAmount = 1000 }
                                 }
                             ]
                         }
@@ -228,8 +235,8 @@ namespace POS_Sim_WPF_App
 
 
             string issueModelJson = JsonSerializer.Serialize(issueModel);
-            MessageBox.Show(Globals.GroupID);
-
+            MessageBox.Show(issueModelJson);
+            TestContainer.Text = issueModelJson;
             //////testing out
             //var httpClient = new HttpClient();
             ////httpClient.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -321,8 +328,11 @@ namespace POS_Sim_WPF_App
         {
             if (sender is Button button)
             {
-                string itemName = button.Content.ToString();
-                decimal itemPrice = Convert.ToInt16(button.Tag);
+                string[] tagParts = (button.Tag?.ToString() ?? "").Split('|');
+                string itemName = tagParts[0];
+                decimal itemPrice = Convert.ToInt16(tagParts[1]);
+                int vatRate = Convert.ToInt32(tagParts[2]);
+                Boolean taxFreeItem = Convert.ToBoolean(tagParts[3]);
 
                 var existingItem = SaleItems.FirstOrDefault(i => i.Name == itemName);
                 if (existingItem != null)
@@ -336,7 +346,9 @@ namespace POS_Sim_WPF_App
                     {
                         Name = itemName,
                         Quantity = 1,
-                        TotalPrice = itemPrice
+                        TotalPrice = itemPrice,
+                        VatRate = vatRate,
+                        TaxFreeItem = taxFreeItem
                     });
                 }
 
@@ -448,6 +460,16 @@ namespace POS_Sim_WPF_App
 
         private void PayBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (TaxFreeToggle.IsChecked == false)
+            {
+                MessageBox.Show("helloUNchecked");
+            }
+            else
+            {
+                MessageBox.Show("hellochecked");
+            }
+
+
             //need to add payment simulation// 
 
             int number = int.Parse(ReceiptNumVal.Content.ToString());
