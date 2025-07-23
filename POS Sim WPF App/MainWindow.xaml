@@ -48,6 +48,7 @@
                 <ColumnDefinition Width="25*"/>
                 <ColumnDefinition Width="54*"/>
             </Grid.ColumnDefinitions>
+
             <Border VerticalAlignment="Top" Padding="40" Height="400" CornerRadius="12" Background="White" Margin="-6,0,530,0" Grid.ColumnSpan="2">
                 <Grid Margin="-30,-30,-30,-30">
                     <Grid.RowDefinitions>
@@ -109,6 +110,9 @@
                     <Label x:Name="TotalAmountValue" Content="¥" HorizontalAlignment="Left" Margin="108,2,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Width="90" Foreground="#FFA7A7A7" HorizontalContentAlignment="Right" ClipToBounds="True"/>
                     <Label x:Name="TotalVatValue" Content="¥" HorizontalAlignment="Left" Margin="108,28,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="16" Width="90" Foreground="#FFA7A7A7" HorizontalContentAlignment="Right"/>
                     <Button x:Name="ClearAllListedBtn" Content="クリア" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="ClearAllListedBtn_Click"/>
+                    <Button x:Name="LaunchIC2" Background="Black" Foreground="White" Click="LaunchIC2_Click" Margin="55,61,152,10" Grid.Row="1">
+                    </Button>
+
                     <ToggleButton x:Name="TaxFreeToggle" 
                                   Content="免税" 
                                   HorizontalAlignment="Left" 
@@ -160,7 +164,9 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <Button Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1"/>
+                    <Button x:Name="PayBtn" Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="PayBtn_Click"/>
+                    <Label x:Name="ReceiptNumLabel" Content="レシート番号" HorizontalAlignment="Left" Margin="25,257,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
+                    <Label x:Name="ReceiptNumVal" Content="00001" HorizontalAlignment="Left" Margin="142,259,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
                 </Grid>
             </Border>
             <Border
@@ -174,11 +180,11 @@
                             </LinearGradientBrush>
                         </TabItem.Background>
                         <Grid x:Name="POSContainer" Background="White" Margin="-3,0,3,0">
-                            <Button x:Name="LaunchIC2" HorizontalAlignment="Left" Margin="417,299,0,0" VerticalAlignment="Top" Background="Black" Foreground="White" Width="60" Height="61" Click="LaunchIC2_Click">
-                                <Button Content="Button"/>
-                            </Button>
-                            <Wpf:WebView2 x:Name="webviewContainer" HorizontalAlignment="Left" Height="63" Margin="0,299,0,0" VerticalAlignment="Top" Width="51"/>
-                            <Border BorderBrush="Black" BorderThickness="1"  CornerRadius="15,15,15,15" Margin="0,0,0,23">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45*"/>
+                                <ColumnDefinition Width="202*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border BorderBrush="Black" BorderThickness="1"  CornerRadius="15,15,15,15" Margin="0,0,0,23" Grid.ColumnSpan="2">
                                 <Grid Margin="0,18,0,-19">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
@@ -234,9 +240,12 @@
                     </TabItem>
                 </TabControl>
             </Border>
+            <Wpf:WebView2 x:Name="webviewContainer" HorizontalAlignment="Left" Height="411" Margin="-6,-11,0,0" VerticalAlignment="Top" Width="796" Grid.ColumnSpan="2" Visibility="Hidden"/>
 
         </Grid>
-        <StackPanel/>
+        <StackPanel>
+
+        </StackPanel>
     </Grid>
 
 </Window>
