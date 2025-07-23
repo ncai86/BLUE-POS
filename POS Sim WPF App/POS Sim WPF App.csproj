@@ -10,13 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Others\Loader.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3296.44" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Assets\Goods\" />
-    <Folder Include="Assets\Others\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Others\Loader.gif" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:POS_Sim_WPF_App"
         xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" x:Class="POS_Sim_WPF_App.MainWindow"
         mc:Ignorable="d"
+        xmlns:wpfAnimatedGif="http://wpfanimatedgif.codeplex.com"    
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         Background="#1E1E2F" MaxWidth="800" MaxHeight="450" MinWidth="800" MinHeight="450">
@@ -349,7 +350,21 @@
 
         </Grid>
         <StackPanel>
+            <Grid x:Name="LoaderToast" Margin="249,33,249,97" Grid.ColumnSpan="2">
+                <Grid.RenderTransform>
+                    <TranslateTransform x:Name="GridTransform" Y="-100"/>
+                </Grid.RenderTransform>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55*"/>
+                    <ColumnDefinition Width="96*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Stroke="Black" Fill="#FF8A8A8A" Margin="0,-33,0,-22" Grid.ColumnSpan="2" RadiusY="10" RadiusX="10"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="76,0,0,0" Grid.ColumnSpan="2" Width="133">
+                    <Image x:Name="LoaderImage" Width="60" Height="60" Panel.ZIndex="10"/>
+                    <Label x:Name="PayLoadingLabel" Content="Loading..." Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
 
+            </Grid>
         </StackPanel>
     </Grid>
 
