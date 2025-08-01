@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Others\checkmark-transparent.gif" />
+    <None Remove="Assets\Others\checkmark.gif" />
     <None Remove="Assets\Others\Loader.gif" />
   </ItemGroup>
 
@@ -24,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Others\checkmark.gif" />
     <Resource Include="Assets\Others\Loader.gif" />
   </ItemGroup>
 

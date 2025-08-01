@@ -5,9 +5,15 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using WpfAnimatedGif;
+
 
 
 
@@ -40,6 +46,17 @@ namespace POS_Sim_WPF_App
     //    public int VatRate { get; set; }
     //    public Boolean TaxFreeItem { get; set; }
     //}
+    public class Message
+    {
+        [JsonPropertyName("Sender")]
+        public string Sender { get; set; }
+
+        [JsonPropertyName("Type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("Data")]
+        public string Data { get; set; }
+    }
 
     public class IssueModel
     {
@@ -120,6 +137,12 @@ namespace POS_Sim_WPF_App
             InitializeComponent();
             POSDisplayListBox.ItemsSource = SaleItems;
             DataContext = this;
+
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+            image.EndInit();
+            ImageBehavior.SetAnimatedSource(LoaderImage, image);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -261,12 +284,25 @@ namespace POS_Sim_WPF_App
 
             //webviewContainer.CoreWebView2.NavigateToString(result);
             //MessageBox.Show(issueModelJson);
+            //string html = $@"
+            //<html>
+            //  <body onload='document.forms[0].submit()'>
+            //    <form method='GET' action='https://ic2integra.test.globalblue.com/ui/integra' enctype='application/x-www-form-urlencoded'>
+            //      <input type='hidden' name='sessiontoken' value='{Globals.SessionToken}' />
+            //      <input type='hidden' name='groupid' value='5511' />
+            //      <input type='hidden' name='action' value='issuesilent' />
+            //      <input type='hidden' name='application' value='integra' />
+            //      <input type='hidden' name='language' value='ja' />
+            //    </form>
+            //  </body>
+            //</html>";
+
             string html = $@"
             <html>
               <body onload='document.forms[0].submit()'>
                 <form method='POST' action='https://ic2integra.test.globalblue.com/ui/integra' enctype='application/x-www-form-urlencoded'>
                   <input type='hidden' name='sessiontoken' value='{Globals.SessionToken}' />
-                  <input type='hidden' name='groupid' value='5344' />
+                  <input type='hidden' name='groupid' value='{Globals.GroupID}' />
                   <input type='hidden' name='action' value='issuesilent' />
                   <input type='hidden' name='application' value='integra' />
                   <input type='hidden' name='language' value='ja' />
@@ -275,11 +311,22 @@ namespace POS_Sim_WPF_App
               </body>
             </html>";
 
-            webviewContainer.CoreWebView2.OpenDevToolsWindow();
+
+            //webviewContainer.CoreWebView2.OpenDevToolsWindow();
 
             //HtmlLauncher.OpenHtmlInBrowser(html);
 
             webviewContainer.NavigateToString(html);
+
+            await Task.Delay(5000);
+            //test sending issuemodel
+            Message message = new Message();
+            message.Sender = "testgetmodel";
+            message.Type = "EvtIssueModel";
+            message.Data = $"{issueModelJson}";
+            string toSend = JsonSerializer.Serialize(message);
+
+            await _hubConnection.InvokeAsync("sendEvent", toSend, Globals.GroupID);
             //webviewContainer.Source = new Uri(html);
 
 
@@ -401,46 +448,71 @@ namespace POS_Sim_WPF_App
 
         private void ToggleTaxFreeEnableButton_Checked(object sender, RoutedEventArgs e)
         {
-            //if (TaxFreeToggle.IsChecked == true)
-            //{
-            //    // The toggle is ON (enabled)
-            //    MessageBox.Show("button enabled.");
-            //}
-            //else
-            //{
-            //    // The toggle is OFF (disabled)
-            //    MessageBox.Show("button disabled.");
-            //}
+
         }
 
         private void ToggleTaxFreeEnableButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            //if (TaxFreeToggle.IsChecked == true)
-            //{
-            //    // The toggle is ON (enabled)
-            //    MessageBox.Show("button enabled.");
-            //}
-            //else
-            //{
-            //    // The toggle is OFF (disabled)
-            //    MessageBox.Show("button disabled.");
-            //}
-            //TaxFreeToggle.Background = (Brush)new BrushConverter().ConvertFromString("#FF001EC8");
+
         }
 
         private async void WSTest_Click(object sender, RoutedEventArgs e)
         {
             Guid newGuid = Guid.NewGuid();
 
-            string timestamp = DateTime.Now.ToString("yyMMdd_HHmmsszzz").Replace(":", "");
+            string timestamp = DateTime.Now.ToString("yyMMdd_HHmm").Replace(":", "");
             string groupID = $"{newGuid}{timestamp}".Replace("-", "");
             Globals.GroupID = groupID;
             Debug.WriteLine("Generated GUID: " + groupID);
 
-            string url = $"https://ic2integra.test.globalblue.com/bridge/chat?groupId=5344&sender=BluePOS";
+            //Set up WS connection
+            string url = $"https://ic2integra.test.globalblue.com/bridge/chat?groupId={groupID}&sender=BluePOS";
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(url, o => { o.AccessTokenProvider = () => Task.FromResult(Globals.SessionToken); })
                 .Build();
+
+            //Set up event handlers
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNameCaseInsensitive = true
+            };
+
+            // Receive for WS closed event to handle connection closed scenarios
+            _hubConnection.Closed += async (error) => { };
+
+            // Receive WS server events 
+            _hubConnection.On<string, string, string>("onEvent", (message, groupId, sender) =>
+            {
+                //JsonConvert.DeserializeObject<Message>(message);
+                var deserializedMessage = JsonSerializer.Deserialize<Message>(message);
+
+                if (!string.IsNullOrWhiteSpace(deserializedMessage.Data))
+                {
+
+                    var datanode = JsonNode.Parse(deserializedMessage.Data);
+
+                    string formatted = JsonSerializer.Serialize(datanode, new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                    });
+
+
+                    Debug.WriteLine($"Server Event, Received message from {sender} in group {groupId}: \nSender: {deserializedMessage.Sender}\nType: {deserializedMessage.Type}\nData:{formatted}");
+
+                }
+            });
+
+            // Receive WS application events 
+            _hubConnection.On<string>("onGMBEvent", (message) =>
+            {
+                //JsonConvert.DeserializeObject<Message>(message); 
+                var deserializedMessage = JsonSerializer.Deserialize<Message>(message);
+                Debug.WriteLine($"App Event, Received message: {message}");
+            });
+
 
             var stopwatch = Stopwatch.StartNew();
             try
@@ -456,18 +528,216 @@ namespace POS_Sim_WPF_App
                 Debug.WriteLine($"❌ Failed to start hub connection: {ex.Message}");
             }
 
+
+
         }
 
-        private void PayBtn_Click(object sender, RoutedEventArgs e)
+        private async void PayBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (TaxFreeToggle.IsChecked == false)
+            //slidedown loader
+            var animation = new DoubleAnimation
             {
-                MessageBox.Show("helloUNchecked");
-            }
-            else
+                From = -100,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            };
+            //slideup loader
+            var animation2 = new DoubleAnimation
             {
-                MessageBox.Show("hellochecked");
+                From = 0,
+                To = -200,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            GridTransform.BeginAnimation(TranslateTransform.YProperty, animation);
+
+            await Task.Delay(2500);
+
+            var newImage = new BitmapImage();
+            newImage.BeginInit();
+            newImage.UriSource = new Uri("pack://application:,,,/Assets/Others/checkmark.gif");
+            newImage.EndInit();
+
+            ImageBehavior.SetAnimatedSource(LoaderImage, newImage);
+
+            PayLoadingLabel.Content = "Payment Completed";
+
+            await Task.Delay(2500);
+
+            GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
+
+            //Check Toggle
+            if (TaxFreeToggle.IsChecked == true)
+            {
+                Guid newGuid = Guid.NewGuid();
+
+                string timestamp = DateTime.Now.ToString("yyMMdd_HHmm").Replace(":", "");
+                string groupID = $"{newGuid}{timestamp}".Replace("-", "");
+                Globals.GroupID = groupID;
+                Debug.WriteLine("Generated GUID: " + groupID);
+
+                //Set up WS connection
+                string url = $"https://ic2integra.test.globalblue.com/bridge/chat?groupId={groupID}&sender=BluePOS";
+                _hubConnection = new HubConnectionBuilder()
+                    .WithUrl(url, o => { o.AccessTokenProvider = () => Task.FromResult(Globals.SessionToken); })
+                    .Build();
+
+                //Set up event handlers
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNameCaseInsensitive = true
+                };
+
+                // Receive for WS closed event to handle connection closed scenarios
+                _hubConnection.Closed += async (error) => { };
+
+                // Receive WS server events 
+                _hubConnection.On<string, string, string>("onEvent", (message, groupId, sender) =>
+                {
+                    //JsonConvert.DeserializeObject<Message>(message);
+                    var deserializedMessage = JsonSerializer.Deserialize<Message>(message);
+
+                    if (!string.IsNullOrWhiteSpace(deserializedMessage.Data))
+                    {
+                        var datanode = JsonNode.Parse(deserializedMessage.Data);
+                        string formatted = JsonSerializer.Serialize(datanode, new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                        });
+                        Debug.WriteLine($"Server Event, Received message from {sender} in group {groupId}: \nSender: {deserializedMessage.Sender}\nType: {deserializedMessage.Type}\nData:{formatted}");
+
+
+                        if (deserializedMessage.Type == "EvtIssueSuccess")
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                MessageBox.Show("✅ Issue was successful!");
+                                // You can also trigger any other UI updates or logic here
+                                webviewContainer.Visibility = Visibility.Collapsed;
+
+                                try
+                                {
+                                    //POSDisplayListBox.Items.Clear();
+                                    SaleItems.Clear();
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Error clearing items: {ex.Message}");
+                                }
+
+                            });
+                        }
+
+                    }
+                });
+
+                // Receive WS application events 
+                _hubConnection.On<string>("onGMBEvent", (message) =>
+                {
+                    //JsonConvert.DeserializeObject<Message>(message); 
+                    var deserializedMessage = JsonSerializer.Deserialize<Message>(message);
+                    Debug.WriteLine($"App Event, Received message: {message}");
+                });
+
+
+                var stopwatch = Stopwatch.StartNew();
+                try
+                {
+                    await _hubConnection.StartAsync();
+                    stopwatch.Stop();
+
+                    Debug.WriteLine("✅ Hub connection started successfully.");
+                    Debug.WriteLine($"⏱️ Time elapsed: {stopwatch.ElapsedMilliseconds} ms");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌ Failed to start hub connection: {ex.Message}");
+                }
+
+
+                ////Unhide webview
+                webviewContainer.Visibility = Visibility.Visible;
+                await webviewContainer.EnsureCoreWebView2Async(null);
+
+                // create issue model
+                var client = new HttpClient();
+
+
+                var purchaseItems = new List<PurchaseItem>();
+
+                foreach (var saleItem in SaleItems)
+                {
+                    var purchaseItem = new PurchaseItem
+                    {
+                        vatRate = saleItem.VatRate,
+                        quantity = saleItem.Quantity,
+                        goodDescription = saleItem.Name,
+                        amount = new Amount { netAmount = saleItem.TotalPrice }
+                    };
+
+                    purchaseItems.Add(purchaseItem);
+                }
+
+
+                var issueModel = new IssueModel
+                {
+                    purchase = new Purchase
+                    {
+                        receipts = new List<Receipt>
+                            {
+                                new Receipt
+                                {
+                                    receiptNumber = ReceiptNumVal.Content.ToString(),
+                                    receiptDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                    purchaseItems = purchaseItems
+                                }
+                            }
+                    }
+                };
+
+
+                string issueModelJson = JsonSerializer.Serialize(issueModel);
+                MessageBox.Show(issueModelJson);
+                TestContainer.Text = issueModelJson;
+
+                string html = $@"
+                <html>
+                  <body onload='document.forms[0].submit()'>
+                    <form method='POST' action='https://ic2integra.test.globalblue.com/ui/integra' enctype='application/x-www-form-urlencoded'>
+                      <input type='hidden' name='sessiontoken' value='{Globals.SessionToken}' />
+                      <input type='hidden' name='groupid' value='{Globals.GroupID}' />
+                      <input type='hidden' name='action' value='issuesilent' />
+                      <input type='hidden' name='application' value='integra' />
+                      <input type='hidden' name='language' value='ja' />
+                      <input type='hidden' name='issuemodel' value='{issueModelJson}' />
+                    </form>
+                  </body>
+                </html>";
+
+
+                //webviewContainer.CoreWebView2.OpenDevToolsWindow();
+
+                //HtmlLauncher.OpenHtmlInBrowser(html);
+
+                webviewContainer.NavigateToString(html);
+
+                await Task.Delay(5000);
+                //test sending issuemodel
+                Message message = new Message();
+                message.Sender = "testgetmodel";
+                message.Type = "EvtIssueModel";
+                message.Data = $"{issueModelJson}";
+                string toSend = JsonSerializer.Serialize(message);
+
+                await _hubConnection.InvokeAsync("sendEvent", toSend, Globals.GroupID);
+
             }
+
 
 
             //need to add payment simulation// 
@@ -478,6 +748,26 @@ namespace POS_Sim_WPF_App
             int desiredLength = ReceiptNumVal.Content.ToString().Length;
             string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
             ReceiptNumVal.Content = result;
+            MessageBox.Show("test");
+
+
+            var loaderImage = new BitmapImage();
+            loaderImage.BeginInit();
+            loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+            loaderImage.EndInit();
+
+            ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+
+            try
+            {
+                //POSDisplayListBox.Items.Clear();
+                SaleItems.Clear();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error clearing items: {ex.Message}");
+            }
 
         }
 
