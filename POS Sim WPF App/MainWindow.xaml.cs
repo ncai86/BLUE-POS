@@ -566,11 +566,22 @@ namespace POS_Sim_WPF_App
 
             await Task.Delay(2500);
 
-            GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
+            //GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
 
             //Check Toggle
             if (TaxFreeToggle.IsChecked == true)
             {
+                //show loader
+                var gbloaderImage = new BitmapImage();
+                gbloaderImage.BeginInit();
+                gbloaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+                gbloaderImage.EndInit();
+                ImageBehavior.SetAnimatedSource(LoaderImage, gbloaderImage);
+                PayLoadingLabel.Content = "Loading Tax Free UI";
+
+
+                //await Task.Delay(1000);
+
                 Guid newGuid = Guid.NewGuid();
 
                 string timestamp = DateTime.Now.ToString("yyMMdd_HHmm").Replace(":", "");
@@ -702,7 +713,7 @@ namespace POS_Sim_WPF_App
 
 
                 string issueModelJson = JsonSerializer.Serialize(issueModel);
-                MessageBox.Show(issueModelJson);
+                //MessageBox.Show(issueModelJson);
                 TestContainer.Text = issueModelJson;
 
                 string html = $@"
@@ -726,7 +737,7 @@ namespace POS_Sim_WPF_App
 
                 webviewContainer.NavigateToString(html);
 
-                await Task.Delay(5000);
+                //await Task.Delay(5000);
                 //test sending issuemodel
                 Message message = new Message();
                 message.Sender = "testgetmodel";
@@ -735,28 +746,15 @@ namespace POS_Sim_WPF_App
                 string toSend = JsonSerializer.Serialize(message);
 
                 await _hubConnection.InvokeAsync("sendEvent", toSend, Globals.GroupID);
+                await Task.Delay(1000);
+                GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
 
             }
-
-
-
-            //need to add payment simulation// 
-
-            int number = int.Parse(ReceiptNumVal.Content.ToString());
-            number += 1;
-
-            int desiredLength = ReceiptNumVal.Content.ToString().Length;
-            string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
-            ReceiptNumVal.Content = result;
-            MessageBox.Show("test");
-
-
-            var loaderImage = new BitmapImage();
-            loaderImage.BeginInit();
-            loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
-            loaderImage.EndInit();
-
-            ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+            else
+            {
+                GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
+                await Task.Delay(2500);
+            }
 
             try
             {
@@ -768,6 +766,27 @@ namespace POS_Sim_WPF_App
             {
                 MessageBox.Show($"Error clearing items: {ex.Message}");
             }
+
+
+            //need to add payment simulation// 
+
+            int number = int.Parse(ReceiptNumVal.Content.ToString());
+            number += 1;
+
+            int desiredLength = ReceiptNumVal.Content.ToString().Length;
+            string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
+            ReceiptNumVal.Content = result;
+            //MessageBox.Show("test");
+
+
+            var loaderImage = new BitmapImage();
+            loaderImage.BeginInit();
+            loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+            loaderImage.EndInit();
+
+            ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+
+
 
         }
 
