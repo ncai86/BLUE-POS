@@ -126,7 +126,7 @@
                                   Foreground="White" 
                                   BorderBrush="Black"
                                   Checked="ToggleTaxFreeEnableButton_Checked"
-                                  Unchecked="ToggleTaxFreeEnableButton_Unchecked" Focusable="False">
+                                  Unchecked="ToggleTaxFreeEnableButton_Unchecked" Focusable="False" Visibility="Collapsed">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Template">
@@ -172,7 +172,7 @@
             </Border>
             <Border
                 Width="520" VerticalAlignment="Top" Padding="40" Height="400" HorizontalAlignment="Center" CornerRadius="12" Background="White" Grid.Column="1">
-                <TabControl x:Name="tabView" Margin="-30,-48,-30,-22" IsSynchronizedWithCurrentItem="True" SelectedIndex="1" BorderBrush="#FFFBFBFB">
+                <TabControl x:Name="tabView" Margin="-30,-48,-30,-22" IsSynchronizedWithCurrentItem="True" SelectedIndex="2" BorderBrush="#FFFBFBFB">
                     <TabItem x:Name="POSTab" Header="POS">
                         <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1">
@@ -262,7 +262,7 @@
                                             <TextBlock Text="¥3200" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button x:Name="Product13" Tag="雑貨C|15000|8" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
+                                    <Button x:Name="Product13" Tag="雑貨C|15000|8|true" Style="{StaticResource HoverGrowButtonStyle}" HorizontalAlignment="Left" Margin="340,110,0,0" VerticalAlignment="Top" Height="100" Width="66" Background="#FFC3CFD4" Click="Product_Click">
                                         <StackPanel>
                                             <TextBlock Text="雑貨C" HorizontalAlignment="Center"/>
                                             <TextBlock Text="¥15000" HorizontalAlignment="Center" FontSize="12" Foreground="White"/>
@@ -319,6 +319,31 @@
                                 </Grid>
                             </Border>
                         </Grid>
+                    </TabItem>
+                    <TabItem x:Name="testtab" Header="test">
+
+                        <ListView ItemsSource="{Binding Transactions}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Receipt #" DisplayMemberBinding="{Binding ReceiptNum}" Width="100" />
+                                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding TotalGrossAmount}" Width="150" />
+                                    <GridViewColumn Header="Doc ID" DisplayMemberBinding="{Binding DocID}" Width="150" />
+
+                                    <!-- Button Column -->
+                                    <GridViewColumn Header="Actions">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Void"
+                                Command="{Binding DataContext.VoidTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
                     </TabItem>
                     <TabItem x:Name="SettingsTab" Header="Settings">
                         <Grid x:Name="SettingsContainer" Background="#FFC38A8A">

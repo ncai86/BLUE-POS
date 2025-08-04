@@ -40,6 +40,13 @@ namespace POS_Sim_WPF_App
         public Boolean TaxFreeItem { get; set; }
     }
 
+    public class Transaction
+    {
+        public string ReceiptNum { get; set; }
+        public int TotalGrossAmount { get; set; }
+        public string DocID { get; set; }
+    }
+
     //public class ProductInfo
     //{
     //    public decimal Price { get; set; }
@@ -105,6 +112,8 @@ namespace POS_Sim_WPF_App
     }
 
 
+
+
     public class HtmlLauncher
     {
         public static void OpenHtmlInBrowser(string htmlContent)
@@ -127,8 +136,12 @@ namespace POS_Sim_WPF_App
     public partial class MainWindow : Window
     {
         private static readonly ObservableCollection<SaleItem> saleItems = [];
+        private int _latestTotalGrossAmount;
+        private string _latestDocID;
 
         public ObservableCollection<SaleItem> SaleItems { get; set; } = saleItems;
+
+        public ObservableCollection<Transaction> Transactions { get; set; } = [];
 
         private HubConnection? _hubConnection;
 
@@ -188,6 +201,8 @@ namespace POS_Sim_WPF_App
 
                 if (response.IsSuccessStatusCode)
                 {
+                    TaxFreeToggle.Visibility = Visibility.Visible;
+                    //webviewContainer.Visibility = Visibility.Collapsed;
                     string responseBody = await response.Content.ReadAsStringAsync();
                     MessageBox.Show("Token Response:\n" + responseBody);
                     //TestContainer.Text = responseBody;
@@ -404,7 +419,7 @@ namespace POS_Sim_WPF_App
                 //Update Total
                 decimal total = SaleItems.Sum(i => i.TotalPrice);
                 TotalAmountValue.Content = $"¥{total:0}";
-
+                _latestTotalGrossAmount = Convert.ToInt32(total);
                 decimal vat = (total / 110) * 10;
                 TotalVatValue.Content = $"¥{vat:0}";
 
@@ -439,7 +454,7 @@ namespace POS_Sim_WPF_App
                 //Update Total
                 decimal total = SaleItems.Sum(i => i.TotalPrice);
                 TotalAmountValue.Content = $"¥{total:0}";
-
+                _latestTotalGrossAmount = Convert.ToInt32(total);
                 decimal vat = (total / 110) * 10;
                 TotalVatValue.Content = $"¥{vat:0}";
             }
@@ -534,6 +549,7 @@ namespace POS_Sim_WPF_App
 
         private async void PayBtn_Click(object sender, RoutedEventArgs e)
         {
+
             //slidedown loader
             var animation = new DoubleAnimation
             {
@@ -633,7 +649,16 @@ namespace POS_Sim_WPF_App
                                 try
                                 {
                                     //POSDisplayListBox.Items.Clear();
+
                                     SaleItems.Clear();
+
+                                    _latestDocID = datanode?["NumericDocIdentifier"]?.ToString();
+                                    if (int.TryParse(datanode?["TotalGrossAmount"]?.ToString(), out int grossAmount))
+                                    {
+                                        _latestTotalGrossAmount = grossAmount;
+                                        Debug.WriteLine($"my gross amount: {grossAmount}");
+                                        Debug.WriteLine($"my gross amount2: {_latestTotalGrossAmount}");
+                                    }
 
                                 }
                                 catch (Exception ex)
@@ -768,8 +793,17 @@ namespace POS_Sim_WPF_App
             }
 
 
-            //need to add payment simulation// 
+            //Add to list of transactions
+            var transaction = new Transaction
+            {
+                ReceiptNum = ReceiptNumVal?.Content?.ToString() ?? string.Empty, // You can implement this method
+                TotalGrossAmount = _latestTotalGrossAmount, // Implement based on your logic
+                DocID = _latestDocID
+            };
 
+            Transactions.Add(transaction);
+
+            //need to add payment simulation// 
             int number = int.Parse(ReceiptNumVal.Content.ToString());
             number += 1;
 
@@ -788,7 +822,11 @@ namespace POS_Sim_WPF_App
 
 
 
+
+
+
         }
+
 
     }
 }
