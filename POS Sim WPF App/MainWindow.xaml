@@ -112,7 +112,7 @@
                     <Label x:Name="TaxAmountLabel" Content="消費税" HorizontalAlignment="Left" Margin="58,28,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="16"/>
                     <Label x:Name="TotalAmountValue" Content="¥" HorizontalAlignment="Left" Margin="108,2,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Width="90" Foreground="#FFA7A7A7" HorizontalContentAlignment="Right" ClipToBounds="True"/>
                     <Label x:Name="TotalVatValue" Content="¥" HorizontalAlignment="Left" Margin="108,28,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="16" Width="90" Foreground="#FFA7A7A7" HorizontalContentAlignment="Right"/>
-                    <Button x:Name="ClearAllListedBtn" Content="クリア" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="ClearAllListedBtn_Click"/>
+                    <Button x:Name="ClearAllListedBtn" Content="クリア" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="ClearAllListedBtn_Click" Background="#FFF9A1A1"/>
                     <Button x:Name="LaunchIC2" Background="Black" Foreground="White" Click="LaunchIC2_Click" Margin="55,61,152,10" Grid.Row="1">
                     </Button>
 
@@ -167,7 +167,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <Button x:Name="PayBtn" Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="PayBtn_Click"/>
+                    <Button x:Name="PayBtn" Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="PayBtn_Click" Background="#FF22CC63"/>
                     <Label x:Name="ReceiptNumLabel" Content="レシート番号" HorizontalAlignment="Left" Margin="25,257,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
                     <Label x:Name="ReceiptNumVal" Content="00001" HorizontalAlignment="Left" Margin="142,259,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
                 </Grid>
@@ -327,10 +327,10 @@
                         <ListView x:Name="TransactionList" ItemsSource="{Binding Transactions}" d:ItemsSource="{d:SampleData ItemCount=5}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Receipt #" DisplayMemberBinding="{Binding ReceiptNum}" Width="100" />
-                                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding TotalGrossAmount}" Width="130" />
+                                    <GridViewColumn Header="レシート番号" DisplayMemberBinding="{Binding ReceiptNum}" Width="100" />
+                                    <GridViewColumn Header="税込価格" DisplayMemberBinding="{Binding TotalGrossAmount}" Width="130" />
                                     <GridViewColumn Header="Doc ID" DisplayMemberBinding="{Binding DocID}" Width="150" />
-                                    <GridViewColumn Header="Voided" DisplayMemberBinding="{Binding IsVoided}" Width="50" />
+                                    <GridViewColumn Header="取消済" DisplayMemberBinding="{Binding IsVoided}" Width="50" />
                                     <!-- Button Column -->
                                     <GridViewColumn Header="Actions" Width="50">
                                         <GridViewColumn.CellTemplate>
@@ -339,7 +339,6 @@
                                                         Click="VoidButton_Click"
                                                         Tag="{Binding}"                             
                                                         IsEnabled="{Binding IsVoided, Converter={StaticResource InverseBooleanConverter}}" 
-                                                        Command="{Binding DataContext.VoidTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                         CommandParameter="{Binding}" />         
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
