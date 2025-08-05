@@ -72,9 +72,9 @@
                                 <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="95"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Item" Grid.Column="0" FontWeight="Bold" FontSize="14"/>
-                            <TextBlock Text="Qty" Grid.Column="1" FontWeight="Bold" FontSize="14" TextAlignment="Right" Margin="8,0,8,0"/>
-                            <TextBlock Text="Price" Grid.Column="2" FontWeight="Bold" FontSize="14" Margin="60,0,0,0"/>
+                            <TextBlock Text="商品" Grid.Column="0" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="数量" Grid.Column="1" FontWeight="Bold" FontSize="14" TextAlignment="Right" Margin="8,0,8,0"/>
+                            <TextBlock Text="価格" Grid.Column="2" FontWeight="Bold" FontSize="14" Margin="60,0,0,0"/>
                         </Grid>
                         <ListBox x:Name="POSDisplayListBox" ScrollViewer.CanContentScroll="False" d:ItemsSource="{d:SampleData ItemCount=5}" ItemsSource="{Binding SalesItems}" Width="244" Height="236">
                             <ListBox.ItemTemplate>
@@ -322,7 +322,7 @@
                             </Border>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="TransactionsTab" Header="Transactions">
+                    <TabItem x:Name="TransactionsTab" Header="取引きリスト">
 
                         <ListView x:Name="TransactionList" ItemsSource="{Binding Transactions}" d:ItemsSource="{d:SampleData ItemCount=5}">
                             <ListView.View>
@@ -349,7 +349,7 @@
                         </ListView>
 
                     </TabItem>
-                    <TabItem x:Name="SettingsTab" Header="Settings">
+                    <TabItem x:Name="SettingsTab" Header="設定">
                         <Grid x:Name="SettingsContainer" Background="#FFBAC3C0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="5*"/>
