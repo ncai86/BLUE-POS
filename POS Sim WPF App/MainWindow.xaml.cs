@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -45,6 +47,7 @@ namespace POS_Sim_WPF_App
         public string ReceiptNum { get; set; }
         public int TotalGrossAmount { get; set; }
         public string DocID { get; set; }
+        public bool IsVoided { get; set; }
     }
 
     //public class ProductInfo
@@ -131,6 +134,18 @@ namespace POS_Sim_WPF_App
         }
     }
 
+    public class InverseBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value is bool b ? !b : true;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value is bool b ? !b : false;
+        }
+    }
 
 
     public partial class MainWindow : Window
@@ -821,12 +836,27 @@ namespace POS_Sim_WPF_App
             ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
 
 
-
-
+            TotalAmountValue.Content = "¥";
+            TotalVatValue.Content = "¥";
 
 
         }
 
+
+        private void VoidButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Transaction transaction)
+            {
+                // Your logic to void the transaction
+                transaction.IsVoided = true;
+                button.IsEnabled = false;
+                TransactionList.Items.Refresh();
+
+                // Optionally refresh the ListView or notify the user
+                MessageBox.Show($"Transaction {transaction.ReceiptNum} has been voided.");
+
+            }
+        }
 
     }
 }

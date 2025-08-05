@@ -38,6 +38,8 @@
                       Opacity="0.3"
                       BlurRadius="4"/>
 
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
     </Window.Resources>
 
 
@@ -320,22 +322,25 @@
                             </Border>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="testtab" Header="test">
+                    <TabItem x:Name="TransactionsTab" Header="Transactions">
 
-                        <ListView ItemsSource="{Binding Transactions}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListView x:Name="TransactionList" ItemsSource="{Binding Transactions}" d:ItemsSource="{d:SampleData ItemCount=5}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Receipt #" DisplayMemberBinding="{Binding ReceiptNum}" Width="100" />
-                                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding TotalGrossAmount}" Width="150" />
+                                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding TotalGrossAmount}" Width="130" />
                                     <GridViewColumn Header="Doc ID" DisplayMemberBinding="{Binding DocID}" Width="150" />
-
+                                    <GridViewColumn Header="Voided" DisplayMemberBinding="{Binding IsVoided}" Width="50" />
                                     <!-- Button Column -->
-                                    <GridViewColumn Header="Actions">
+                                    <GridViewColumn Header="Actions" Width="50">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="Void"
-                                Command="{Binding DataContext.VoidTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                CommandParameter="{Binding}" />
+                                                        Click="VoidButton_Click"
+                                                        Tag="{Binding}"                             
+                                                        IsEnabled="{Binding IsVoided, Converter={StaticResource InverseBooleanConverter}}" 
+                                                        Command="{Binding DataContext.VoidTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="{Binding}" />         
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -346,7 +351,7 @@
 
                     </TabItem>
                     <TabItem x:Name="SettingsTab" Header="Settings">
-                        <Grid x:Name="SettingsContainer" Background="#FFC38A8A">
+                        <Grid x:Name="SettingsContainer" Background="#FFBAC3C0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition Width="242*"/>
