@@ -675,6 +675,16 @@ namespace POS_Sim_WPF_App
                                         Debug.WriteLine($"my gross amount2: {_latestTotalGrossAmount}");
                                     }
 
+                                    //Add to list of transactions
+                                    var transaction = new Transaction
+                                    {
+                                        ReceiptNum = ReceiptNumVal?.Content?.ToString() ?? string.Empty, // You can implement this method
+                                        TotalGrossAmount = _latestTotalGrossAmount, // Implement based on your logic
+                                        DocID = _latestDocID
+                                    };
+
+                                    Transactions.Add(transaction);
+
                                 }
                                 catch (Exception ex)
                                 {
@@ -792,6 +802,14 @@ namespace POS_Sim_WPF_App
             }
             else
             {
+                var transaction = new Transaction
+                {
+                    ReceiptNum = ReceiptNumVal?.Content?.ToString() ?? string.Empty, // You can implement this method
+                    TotalGrossAmount = _latestTotalGrossAmount, // Implement based on your logic
+                    DocID = _latestDocID
+                };
+
+                Transactions.Add(transaction);
                 GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
                 await Task.Delay(2500);
             }
@@ -808,15 +826,7 @@ namespace POS_Sim_WPF_App
             }
 
 
-            //Add to list of transactions
-            var transaction = new Transaction
-            {
-                ReceiptNum = ReceiptNumVal?.Content?.ToString() ?? string.Empty, // You can implement this method
-                TotalGrossAmount = _latestTotalGrossAmount, // Implement based on your logic
-                DocID = _latestDocID
-            };
 
-            Transactions.Add(transaction);
 
             //need to add payment simulation// 
             int number = int.Parse(ReceiptNumVal.Content.ToString());

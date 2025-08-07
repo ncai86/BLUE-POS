@@ -371,6 +371,8 @@
                                     <Button x:Name="WSTest" Content="Connect to WS" Background="#FF1C238A" Foreground="White" Cursor="Hand" Width="160" Height="35" Click="WSTest_Click"/>
                                 </StackPanel>
                             </StackPanel>
+                            <RadioButton x:Name="UIType_Webview" Grid.Column="1" Content="Webview" HorizontalAlignment="Left" Margin="30,283,0,0" VerticalAlignment="Top" IsChecked="False" GroupName="UIType"/>
+                            <RadioButton x:Name="UIType_Browser" Grid.Column="1" Content="Web Browser (Edge)" HorizontalAlignment="Left" Margin="30,303,0,0" VerticalAlignment="Top" GroupName="UIType"/>
                         </Grid>
                     </TabItem>
                 </TabControl>
