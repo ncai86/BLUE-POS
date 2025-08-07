@@ -134,6 +134,7 @@ namespace POS_Sim_WPF_App
         }
     }
 
+
     public class InverseBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -146,6 +147,9 @@ namespace POS_Sim_WPF_App
             return value is bool b ? !b : false;
         }
     }
+
+
+
 
 
     public partial class MainWindow : Window
@@ -177,6 +181,63 @@ namespace POS_Sim_WPF_App
         {
 
         }
+
+
+
+        Process edgeProcess;
+        private void OpenHtmlInEdge(string htmlContent)
+        {
+            // Save HTML to a temporary file
+            string tempFilePath = Path.Combine(Path.GetTempPath(), "tempPage.html");
+            File.WriteAllText(tempFilePath, htmlContent);
+
+
+            string persistentProfilePath = Path.Combine(Path.GetTempPath(), "ChromeProfile_Persistent");
+            Directory.CreateDirectory(persistentProfilePath);
+
+
+
+            try
+            {
+                // Open the file in Edge
+                var process = Process.Start(new ProcessStartInfo
+                {
+                    FileName = @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                    Arguments = $"--new-window --user-data-dir=\"{persistentProfilePath}\" \"{tempFilePath}\"",
+                    UseShellExecute = false
+                });
+
+                if (process != null)
+                {
+                    edgeProcess = process;
+                }
+                else
+                {
+                    MessageBox.Show("Failed to start Edge browser.");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error launching Edge: {ex.Message}");
+            }
+
+
+
+        }
+
+        private void CloseEdgeWindow()
+        {
+            Debug.WriteLine("test close edge window");
+            if (edgeProcess != null && !edgeProcess.HasExited)
+            {
+                edgeProcess.Kill();
+                edgeProcess = null;
+            }
+        }
+
+
+
 
         private async void TokTest_Click(object sender, RoutedEventArgs e)
         {
@@ -657,9 +718,18 @@ namespace POS_Sim_WPF_App
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                MessageBox.Show("✅ Issue was successful!");
-                                // You can also trigger any other UI updates or logic here
-                                webviewContainer.Visibility = Visibility.Collapsed;
+                                if (UIType_Webview.IsChecked == true)
+                                {
+                                    MessageBox.Show("✅ Issue was successful!");
+                                    // You can also trigger any other UI updates or logic here
+                                    webviewContainer.Visibility = Visibility.Collapsed;
+                                }
+                                else if (UIType_Browser.IsChecked == true)
+                                {
+                                    CloseEdgeWindow();
+                                    MessageBox.Show("closing window");
+                                }
+
 
                                 try
                                 {
@@ -721,9 +791,6 @@ namespace POS_Sim_WPF_App
                 }
 
 
-                ////Unhide webview
-                webviewContainer.Visibility = Visibility.Visible;
-                await webviewContainer.EnsureCoreWebView2Async(null);
 
                 // create issue model
                 var client = new HttpClient();
@@ -785,7 +852,20 @@ namespace POS_Sim_WPF_App
 
                 //HtmlLauncher.OpenHtmlInBrowser(html);
 
-                webviewContainer.NavigateToString(html);
+                if (UIType_Webview.IsChecked == true)
+                {
+                    ////Unhide webview
+                    webviewContainer.Visibility = Visibility.Visible;
+                    await webviewContainer.EnsureCoreWebView2Async(null);
+                    webviewContainer.NavigateToString(html);
+                }
+                else if (UIType_Browser.IsChecked == true)
+                {
+                    OpenHtmlInEdge(html);
+
+                }
+
+
 
                 //await Task.Delay(5000);
                 //test sending issuemodel
