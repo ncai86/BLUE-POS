@@ -236,6 +236,47 @@ namespace POS_Sim_WPF_App
             }
         }
 
+        private void RefreshingUI()
+        {
+            try
+            {
+                //POSDisplayListBox.Items.Clear();
+                SaleItems.Clear();
+                if (SaleItems.Count == 0)
+                {
+                    // List is empty
+                    PayBtn.IsEnabled = false;
+                    PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error clearing items: {ex.Message}");
+            }
+            //need to add payment simulation// 
+            int number = int.Parse(ReceiptNumVal.Content.ToString());
+            number += 1;
+
+            int desiredLength = ReceiptNumVal.Content.ToString().Length;
+            string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
+            ReceiptNumVal.Content = result;
+            //MessageBox.Show("test");
+
+
+            var loaderImage = new BitmapImage();
+            loaderImage.BeginInit();
+            loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+            loaderImage.EndInit();
+            PayLoadingLabel.Content = "Loading...";
+            TaxFreeToggle.IsChecked = false;
+            ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+
+
+            TotalAmountValue.Content = "¥";
+            TotalVatValue.Content = "¥";
+        }
+
 
 
 
@@ -773,7 +814,9 @@ namespace POS_Sim_WPF_App
                                     };
 
                                     Transactions.Add(transaction);
-
+                                    //////
+                                    //clearing list of saleitems
+                                    RefreshingUI();
                                 }
                                 catch (Exception ex)
                                 {
@@ -898,6 +941,7 @@ namespace POS_Sim_WPF_App
                 await Task.Delay(1000);
                 GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
 
+
             }
             else
             {
@@ -910,49 +954,52 @@ namespace POS_Sim_WPF_App
 
                 Transactions.Add(transaction);
                 GridTransform.BeginAnimation(TranslateTransform.YProperty, animation2);
+                RefreshingUI();
                 await Task.Delay(2500);
-            }
-
-            try
-            {
-                //POSDisplayListBox.Items.Clear();
-                SaleItems.Clear();
-                if (SaleItems.Count == 0)
-                {
-                    // List is empty
-                    PayBtn.IsEnabled = false;
-                    PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
-                }
 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error clearing items: {ex.Message}");
-            }
+
+            //try
+            //{
+            //    //POSDisplayListBox.Items.Clear();
+            //    SaleItems.Clear();
+            //    if (SaleItems.Count == 0)
+            //    {
+            //        // List is empty
+            //        PayBtn.IsEnabled = false;
+            //        PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error clearing items: {ex.Message}");
+            //}
 
 
 
 
-            //need to add payment simulation// 
-            int number = int.Parse(ReceiptNumVal.Content.ToString());
-            number += 1;
+            ////need to add payment simulation// 
+            //int number = int.Parse(ReceiptNumVal.Content.ToString());
+            //number += 1;
 
-            int desiredLength = ReceiptNumVal.Content.ToString().Length;
-            string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
-            ReceiptNumVal.Content = result;
-            //MessageBox.Show("test");
-
-
-            var loaderImage = new BitmapImage();
-            loaderImage.BeginInit();
-            loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
-            loaderImage.EndInit();
-
-            ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+            //int desiredLength = ReceiptNumVal.Content.ToString().Length;
+            //string result = number.ToString("D" + ReceiptNumVal.Content.ToString().Length);
+            //ReceiptNumVal.Content = result;
+            ////MessageBox.Show("test");
 
 
-            TotalAmountValue.Content = "¥";
-            TotalVatValue.Content = "¥";
+            //var loaderImage = new BitmapImage();
+            //loaderImage.BeginInit();
+            //loaderImage.UriSource = new Uri("pack://application:,,,/Assets/Others/Loader.gif");
+            //loaderImage.EndInit();
+            //PayLoadingLabel.Content = "Loading...";
+            //TaxFreeToggle.IsChecked = false;
+            //ImageBehavior.SetAnimatedSource(LoaderImage, loaderImage);
+
+
+            //TotalAmountValue.Content = "¥";
+            //TotalVatValue.Content = "¥";
 
 
         }
