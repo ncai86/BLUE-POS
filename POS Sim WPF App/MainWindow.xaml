@@ -167,7 +167,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <Button x:Name="PayBtn" Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="PayBtn_Click" Background="#FF22CC63"/>
+                    <Button x:Name="PayBtn" Content="支払" HorizontalAlignment="Left" Margin="168,61,0,0" VerticalAlignment="Top" Width="50" Height="30" BorderThickness="1,1,1,1" SnapsToDevicePixels="True" Grid.Row="1" Click="PayBtn_Click" Background="#FF7F7F7F" IsEnabled="False"/>
                     <Label x:Name="ReceiptNumLabel" Content="レシート番号" HorizontalAlignment="Left" Margin="25,257,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
                     <Label x:Name="ReceiptNumVal" Content="00001" HorizontalAlignment="Left" Margin="142,259,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.RowSpan="2"/>
                 </Grid>

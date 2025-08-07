@@ -499,6 +499,15 @@ namespace POS_Sim_WPF_App
                 decimal vat = (total / 110) * 10;
                 TotalVatValue.Content = $"¥{vat:0}";
 
+
+                if (SaleItems.Count != 0)
+                {
+                    // List is empty
+                    PayBtn.IsEnabled = true;
+                    PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF22CC63");
+                }
+
+
             }
         }
 
@@ -509,7 +518,8 @@ namespace POS_Sim_WPF_App
             {
                 //POSDisplayListBox.Items.Clear();
                 SaleItems.Clear();
-
+                PayBtn.IsEnabled = false;
+                PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
             }
             catch (Exception ex)
             {
@@ -534,6 +544,15 @@ namespace POS_Sim_WPF_App
                 decimal vat = (total / 110) * 10;
                 TotalVatValue.Content = $"¥{vat:0}";
             }
+
+
+            if (SaleItems.Count == 0)
+            {
+                // List is empty
+                PayBtn.IsEnabled = false;
+                PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
+            }
+
         }
 
 
@@ -898,6 +917,12 @@ namespace POS_Sim_WPF_App
             {
                 //POSDisplayListBox.Items.Clear();
                 SaleItems.Clear();
+                if (SaleItems.Count == 0)
+                {
+                    // List is empty
+                    PayBtn.IsEnabled = false;
+                    PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
+                }
 
             }
             catch (Exception ex)
