@@ -184,8 +184,8 @@ namespace POS_Sim_WPF_App
 
 
 
-        Process edgeProcess;
-        private void OpenHtmlInEdge(string htmlContent)
+        Process chromeProcess;
+        private void OpenHtmlInChrome(string htmlContent)
         {
             // Save HTML to a temporary file
             string tempFilePath = Path.Combine(Path.GetTempPath(), "tempPage.html");
@@ -209,7 +209,7 @@ namespace POS_Sim_WPF_App
 
                 if (process != null)
                 {
-                    edgeProcess = process;
+                    chromeProcess = process;
                 }
                 else
                 {
@@ -226,13 +226,13 @@ namespace POS_Sim_WPF_App
 
         }
 
-        private void CloseEdgeWindow()
+        private void CloseChromeWindow()
         {
             Debug.WriteLine("test close edge window");
-            if (edgeProcess != null && !edgeProcess.HasExited)
+            if (chromeProcess != null && !chromeProcess.HasExited)
             {
-                edgeProcess.Kill();
-                edgeProcess = null;
+                chromeProcess.Kill();
+                chromeProcess = null;
             }
         }
 
@@ -726,7 +726,7 @@ namespace POS_Sim_WPF_App
                                 }
                                 else if (UIType_Browser.IsChecked == true)
                                 {
-                                    CloseEdgeWindow();
+                                    CloseChromeWindow();
                                     MessageBox.Show("closing window");
                                 }
 
@@ -861,7 +861,7 @@ namespace POS_Sim_WPF_App
                 }
                 else if (UIType_Browser.IsChecked == true)
                 {
-                    OpenHtmlInEdge(html);
+                    OpenHtmlInChrome(html);
 
                 }
 
