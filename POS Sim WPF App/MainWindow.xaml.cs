@@ -550,7 +550,7 @@ namespace POS_Sim_WPF_App
             {
                 // List is empty
                 PayBtn.IsEnabled = false;
-                PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
+                PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
             }
 
         }
