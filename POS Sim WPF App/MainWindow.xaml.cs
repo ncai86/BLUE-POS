@@ -239,11 +239,11 @@ namespace POS_Sim_WPF_App
 
 
 
-        private async void TokTest_Click(object sender, RoutedEventArgs e)
+        private async void saveCredentialBtn_Click(object sender, RoutedEventArgs e)
         {
             string username = usernameTextbox.Text.Trim();
             string password = passwordTextbox.Password;
-            int tokenLifetime = 100;
+            int tokenLifetime = 3600;
 
             var payloadObject = new
             {
@@ -504,7 +504,7 @@ namespace POS_Sim_WPF_App
                 {
                     // List is empty
                     PayBtn.IsEnabled = true;
-                    PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF22CC63");
+                    PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF22CC63"));
                 }
 
 
@@ -519,7 +519,7 @@ namespace POS_Sim_WPF_App
                 //POSDisplayListBox.Items.Clear();
                 SaleItems.Clear();
                 PayBtn.IsEnabled = false;
-                PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
+                PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
             }
             catch (Exception ex)
             {
@@ -921,7 +921,7 @@ namespace POS_Sim_WPF_App
                 {
                     // List is empty
                     PayBtn.IsEnabled = false;
-                    PayBtn.Background = (Brush)new BrushConverter().ConvertFromString("#FF7F7F7F");
+                    PayBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF7F7F7F"));
                 }
 
             }
