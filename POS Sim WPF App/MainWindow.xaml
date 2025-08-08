@@ -339,7 +339,7 @@
                                                         Click="VoidButton_Click"
                                                         Tag="{Binding}"                             
                                                         IsEnabled="{Binding IsVoided, Converter={StaticResource InverseBooleanConverter}}" 
-                                                        CommandParameter="{Binding}" />         
+                                                        CommandParameter="{Binding}" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -355,8 +355,8 @@
                                 <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition Width="242*"/>
                             </Grid.ColumnDefinitions>
-                            <Border BorderBrush="#FF5A5858" BorderThickness="1" Grid.Column="1" Margin="10,23,273,33" CornerRadius="5,5,5,5"/>
-                            <TextBox x:Name="TestContainer" HorizontalAlignment="Left" Margin="216,33,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="148" Height="218" Grid.Column="1"/>
+                            <Border BorderBrush="#FF5A5858" BorderThickness="1" Grid.Column="1" Margin="10,23,163,33" CornerRadius="5,5,5,5"/>
+                            <TextBox x:Name="TestContainer" HorizontalAlignment="Left" Margin="326,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="148" Height="218" Grid.Column="1"/>
                             <StackPanel VerticalAlignment="Top" Grid.Column="1" Margin="19,33,294,0" Height="344">
                                 <StackPanel>
                                     <TextBlock Margin="0,0,0,5" Text="Username"/>
@@ -375,6 +375,9 @@
                             <RadioButton x:Name="UIType_Webview" Grid.Column="1" Content="Webview" HorizontalAlignment="Left" Margin="30,283,0,0" VerticalAlignment="Top" IsChecked="False" GroupName="UIType"/>
                             <RadioButton x:Name="UIType_Browser" Grid.Column="1" Content="Web Browser (Edge)" HorizontalAlignment="Left" Margin="30,303,0,0" VerticalAlignment="Top" GroupName="UIType" IsChecked="True"/>
                             <Label Grid.Column="1" Content="Select UI Display Mode" HorizontalAlignment="Left" Margin="30,252,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Grid.Column="1" Content="Select Integra Mode" HorizontalAlignment="Left" Margin="190,252,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <RadioButton x:Name="IntegraType_Web" Grid.Column="1" Content="Web" HorizontalAlignment="Left" Margin="195,283,0,0" VerticalAlignment="Top" IsChecked="False" GroupName="IntegraType"/>
+                            <RadioButton x:Name="IntegraType_Websocket" Grid.Column="1" Content="Websocket" HorizontalAlignment="Left" Margin="195,303,0,0" VerticalAlignment="Top" IsChecked="True" GroupName="IntegraType"/>
                         </Grid>
                     </TabItem>
                 </TabControl>
